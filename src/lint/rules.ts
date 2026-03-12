@@ -41,8 +41,9 @@ const API_EXTRA_FIELDS   = ["method", "path", "base-url"];
 // ── 파싱 헬퍼 ────────────────────────────────────────────────────────────────
 
 export function parseFrontmatter(content: string): Record<string, string> {
+  const normalized = content.replace(/\r\n?/g, "\n");
   const fm: Record<string, string> = {};
-  const stripped = content.trimStart();
+  const stripped = normalized.trimStart();
   if (!stripped.startsWith("---")) return fm;
   const end = stripped.indexOf("\n---\n", 3);
   if (end === -1) return fm;
@@ -58,7 +59,8 @@ export function parseFrontmatter(content: string): Record<string, string> {
 }
 
 export function bodyOnly(content: string): string {
-  const stripped = content.trimStart();
+  const normalized = content.replace(/\r\n?/g, "\n");
+  const stripped = normalized.trimStart();
   if (!stripped.startsWith("---")) return content;
   const end = stripped.indexOf("\n---\n", 3);
   if (end === -1) return content;
