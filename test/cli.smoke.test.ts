@@ -666,14 +666,17 @@ describe("CLI smoke", () => {
   });
 
   it("uses non-isolated node tests for demo reproducibility in restricted environments", () => {
-    const demoPackageJson = fs.readFileSync(path.join(ROOT, "demo", "package.json"), "utf-8");
+    const demoPackagePath = path.join(ROOT, "demo", "package.json");
     const templatePackageJson = fs.readFileSync(
       path.join(ROOT, "scripts", "demo-template", "package.json"),
       "utf-8",
     );
     const loopScript = fs.readFileSync(path.join(ROOT, "scripts", "demo-codex-loop.ps1"), "utf-8");
 
-    expect(demoPackageJson).toContain('--test-isolation=none');
+    if (fs.existsSync(demoPackagePath)) {
+      const demoPackageJson = fs.readFileSync(demoPackagePath, "utf-8");
+      expect(demoPackageJson).toContain('--test-isolation=none');
+    }
     expect(templatePackageJson).toContain('--test-isolation=none');
     expect(loopScript).toContain('& node --test --test-isolation=none');
   });

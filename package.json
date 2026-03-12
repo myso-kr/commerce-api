@@ -1,6 +1,6 @@
 {
   "name": "naver-commerce-api-docs-cli",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "LLM-agent-friendly Naver Commerce API docs CLI with bundled normalized docs and JSONL output.",
   "type": "module",
   "main": "./dist/cli.js",
