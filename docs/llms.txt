@@ -1,0 +1,213 @@
+# 네이버 커머스API
+
+> 스마트스토어 주요 기능을 HTTP API로 호출하는 커머스 플랫폼 공개 API 문서.
+> OAuth2 Client Credentials 인증 필요. API 버전: 최신.
+
+## 가이드
+
+- [Commerce API - 전체 페이지 목록](guide/_index.md): 수집일: 2026-03-11T19:50:12 총 196개 페이지
+- [커머스API](guide/커머스api.md): Version: 2.73.0
+
+## API 엔드포인트
+
+- [(v2) 그룹상품 등록](api/v2/standard-group-products.POST.md): 비동기로 동작합니다. 요청 결과는 그룹상품 요청 결과 조회 API로 확인할 수 있습니다. (POST /v2/standard-group-products)
+- [(v2) 그룹상품 삭제](api/v2/standard-group-products/{groupProductNo}.DELETE.md): 그룹상품을 삭제합니다. (DELETE /v2/standard-group-products/{groupProductNo})
+- [(v2) 그룹상품 수정](api/v2/standard-group-products/{groupProductNo}.PUT.md): 비동기로 동작합니다. 요청 결과는 그룹상품 요청 결과 조회 API로 확인할 수 있습니다. (PUT /v2/standard-group-products/{groupProductNo})
+- [(v2) 그룹상품 요청 결과 조회](api/v2/standard-group-products/status.GET.md): 그룹상품 등록 API와 그룹상품 수정 API의 요청 결과를 조회합니다. - type : CREATE(등록), UPDATE(수정) (GET /v2/standard-group-products/status)
+- [(v2) 그룹상품 조회](api/v2/standard-group-products/{groupProductNo}.GET.md): 그룹상품을 조회합니다. (GET /v2/standard-group-products/{groupProductNo})
+- [(v2) 반품 택배사 다건 조회](api/v2/product-delivery-info/return-delivery-companies.GET.md): 반품/교환 택배사 코드 목록을 조회합니다. 반품/교환 택배사명 파라미터에 값을 입력하지 않으면 전체 반품/교환 택배사 코드 목록을 조회합니다. (GET /v2/product-delivery-info/return-delivery-companies)
+- [(v2) 상품 등록](api/v2/products.POST.md): BAD_REQUEST 오류 응답 시, InvalidInputs 필드 정보가 없거나 InvalidInputs 필드만으로 정확한 판단이 어려울 수 있습니다. 이때는 message 내용을 활용한 오류 판단을 권장합니다. (POST /v2/products)
+- [(v2) 상품 상세 정보 임시 저장](api/v2/standard-group-products/temp-detail-content.POST.md): 그룹상품 요청 시 개별 상품 상세 정보 저장이 필요한 경우 사전에 임시 저장합니다. (POST /v2/standard-group-products/temp-detail-content)
+- [(v2) 원상품 삭제](api/v2/products/origin-products/{originProductNo}.DELETE.md): 원상품을 삭제합니다. (DELETE /v2/products/origin-products/{originProductNo})
+- [(v2) 원상품 수정](api/v2/products/origin-products/{originProductNo}.PUT.md): BAD_REQUEST 오류 응답 시, InvalidInputs 필드 정보가 없거나 InvalidInputs 필드만으로 정확한 판단이 어려울 수 있습니다. 이때는 message 내용을 활용한 오류 판단을 권장합니다. (PUT /v2/products/origin-products/{originProductNo})
+- [(v2) 원상품 조회](api/v2/products/origin-products/{originProductNo}.GET.md): 원상품을 조회합니다. (GET /v2/products/origin-products/{originProductNo})
+- [(v2) 제한 태그 여부 조회](api/v2/tags/restricted-tags.GET.md): 제한 태그 여부를 조회합니다. (GET /v2/tags/restricted-tags)
+- [(v2) 채널 상품 삭제](api/v2/products/channel-products/{channelProductNo}.DELETE.md): 채널 상품을 삭제합니다. (DELETE /v2/products/channel-products/{channelProductNo})
+- [(v2) 채널 상품 수정](api/v2/products/channel-products/{channelProductNo}.PUT.md): BAD_REQUEST 오류 응답 시, InvalidInputs 필드 정보가 없거나 InvalidInputs 필드만으로 정확한 판단이 어려울 수 있습니다. 이때는 message 내용을 활용한 오류 판단을 권장합니다. (PUT /v2/products/channel-products/{channelProductNo})
+- [(v2) 채널 상품 조회](api/v2/products/channel-products/{channelProductNo}.GET.md): 채널 상품을 조회합니다. (GET /v2/products/channel-products/{channelProductNo})
+- [(v2) 추천 태그 검색 목록 조회](api/v2/tags/recommend-tags.GET.md): keyword stringrequired (GET /v2/tags/recommend-tags)
+- [(v2) 판매 옵션 정보 조회](api/v2/standard-purchase-option-guides.GET.md): 판매 옵션 정보를 조회합니다. (GET /v2/standard-purchase-option-guides)
+- [SKU 목록 조회 API](api/v1/logistics/products/sellers/me/skus/query-paged-list.POST.md): SKU 목록 페이지를 조회합니다. (POST /v1/logistics/products/sellers/me/skus/query-paged-list)
+- [SKU 연결상품 조회 API](api/v1/logistics/products/sellers/me/skus/{nsId}/product-mappings.GET.md): SKU에 연결된 상품 목록을 페이지 단위로 조회합니다. (GET /v1/logistics/products/sellers/me/skus/{nsId}/product-mappings)
+- [SKU 조회 API](api/v1/logistics/products/sellers/me/skus/{nsId}.GET.md): 호출 대상 네이버 SKU ID에 대한 상세 정보를 응답합니다. (GET /v1/logistics/products/sellers/me/skus/{nsId})
+- [건별 부가세 내역 조회](api/v1/pay-settle/vat/case.GET.md): startDate string<date>required (GET /v1/pay-settle/vat/case)
+- [건별 정산 내역 조회](api/v1/pay-settle/settle/case.GET.md): searchDate string<date> (GET /v1/pay-settle/settle/case)
+- [검색 채널 API](api/v1/bizdata-stats/channels/{channelNo}/marketing/search/detail.GET.md): [브랜드스토어 전용] 조회 기간 내 검색 채널별 유입 및 결제 성과를 키워드별로 유입 수 기준 상위 1000개 제공합니다. (GET /v1/bizdata-stats/channels/{channelNo}/marketing/search/detail)
+- [검색 채널 키워드별 API](api/v1/bizdata-stats/channels/{channelNo}/marketing/search/keyword.GET.md): [브랜드스토어 전용] 조회 기간 내 키워드별 유입 및 결제 성과를 유입 수 기준 상위 10개 제공합니다. (GET /v1/bizdata-stats/channels/{channelNo}/marketing/search/keyword)
+- [계정 정보 조회](api/v1/seller/account.GET.md): 계정 정보를 조회하는 API입니다. 조회 대상 판매자 번호에 대한 인증 토큰이 필요합니다. (GET /v1/seller/account)
+- [계정으로 채널 정보 조회](api/v1/seller/channels.GET.md): 계정 하위의 채널 정보를 조회하는 API입니다. 조회 대상 판매자 번호에 대한 인증 토큰이 필요합니다. (GET /v1/seller/channels)
+- [고객 문의 답변 등록](api/v1/pay-merchant/inquiries/{inquiryNo}/answer.POST.md): inquiryNo integer<int64>required (POST /v1/pay-merchant/inquiries/{inquiryNo}/answer)
+- [고객 문의 답변 수정](api/v1/pay-merchant/inquiries/{inquiryNo}/answer/{answerContentId}.PUT.md): inquiryNo integer<int64>required (PUT /v1/pay-merchant/inquiries/{inquiryNo}/answer/{answerContentId})
+- [고객 문의 조회](api/v1/pay-user/inquiries.GET.md): page integer (GET /v1/pay-user/inquiries)
+- [고객 현황(계정) API](api/v1/customer-data/customer-status/account/statistics.GET.md): [브랜드스토어 전용] 스토어의 일별 고객 현황 데이터를 제공합니다. (GET /v1/customer-data/customer-status/account/statistics)
+- [고객 현황(채널) API](api/v1/customer-data/customer-status/channels/{channelNo}/statistics.GET.md): [브랜드스토어 전용] 채널의 일별 고객 현황 데이터를 제공합니다. (GET /v1/customer-data/customer-status/channels/{channelNo}/statistics)
+- [공지사항 단건 조회](api/v1/contents/seller-notices/{sellerNoticeId}.GET.md): sellerNoticeId integer<int64>required (GET /v1/contents/seller-notices/{sellerNoticeId})
+- [공지사항 등록](api/v1/contents/seller-notices.POST.md): postCategoryType공지사항 유형 (string) (POST /v1/contents/seller-notices)
+- [공지사항 목록 조회](api/v1/contents/seller-notices.GET.md): page integer<int32> (GET /v1/contents/seller-notices)
+- [공지사항 삭제](api/v1/contents/seller-notices/{sellerNoticeId}.DELETE.md): 입력한 공지사항 번호의 공지사항을 삭제합니다. 단, 상품에 연결된 공지사항은 삭제할 수 없습니다. (DELETE /v1/contents/seller-notices/{sellerNoticeId})
+- [공지사항 수정](api/v1/contents/seller-notices/{sellerNoticeId}.PUT.md): sellerNoticeId integer<int64>required (PUT /v1/contents/seller-notices/{sellerNoticeId})
+- [교환 거부(철회)](api/v1/pay-order/seller/product-orders/{productOrderId}/claim/exchange/reject.POST.md): 1건의 상품 주문에 대한 교환 요청을 거부(철회)합니다. (POST /v1/pay-order/seller/product-orders/{productOrderId}/claim/exchange/reject)
+- [교환 보류 해제](api/v1/pay-order/seller/product-orders/{productOrderId}/claim/exchange/holdback/release.POST.md): 1건의 상품 주문에 대한 교환 보류를 해제합니다. (POST /v1/pay-order/seller/product-orders/{productOrderId}/claim/exchange/holdback/release)
+- [교환 보류](api/v1/pay-order/seller/product-orders/{productOrderId}/claim/exchange/holdback.POST.md): 1건의 상품 주문에 대한 교환을 보류합니다. (POST /v1/pay-order/seller/product-orders/{productOrderId}/claim/exchange/holdback)
+- [교환 수거 완료](api/v1/pay-order/seller/product-orders/{productOrderId}/claim/exchange/collect/approve.POST.md): 1건의 상품 주문에 대한 교환을 수거 완료 처리합니다. (POST /v1/pay-order/seller/product-orders/{productOrderId}/claim/exchange/collect/approve)
+- [교환 재배송 처리](api/v1/pay-order/seller/product-orders/{productOrderId}/claim/exchange/dispatch.POST.md): 1건의 상품 주문 교환 승인 건을 재배송 처리합니다. (POST /v1/pay-order/seller/product-orders/{productOrderId}/claim/exchange/dispatch)
+- [멀티 상품 변경](api/v1/products/origin-products/multi-update.PATCH.md): 여러 상품의 판매가, 재고, 할인, 판매 상태를 다르게 변경할 수 있습니다. (PATCH /v1/products/origin-products/multi-update)
+- [묶음배송 그룹 다건 조회](api/v1/product-delivery-info/bundle-groups.GET.md): 묶음배송 그룹 코드 목록을 조회합니다. 묶음배송 그룹명을 입력하지 않으면 전체 목록을 조회합니다. 판매자 등록 후 판매자센터에 접속하지 않은 상태로 API를 호출하는 판매자의 경우 '기본 묶음배송 그룹'이 자동으로 등록됩니다. (GET /v1/product-delivery-info/bundle-groups)
+- [묶음배송 그룹 단건 조회](api/v1/product-delivery-info/bundle-groups/{deliveryBundleGroupId}.GET.md): 묶음배송 그룹 정보를 조회합니다. (GET /v1/product-delivery-info/bundle-groups/{deliveryBundleGroupId})
+- [묶음배송 그룹 등록](api/v1/product-delivery-info/bundle-groups.POST.md): deliveryBundleGroup 묶음배송 그룹 정보 구조체 (object)required (POST /v1/product-delivery-info/bundle-groups)
+- [묶음배송 그룹 수정](api/v1/product-delivery-info/bundle-groups/{deliveryBundleGroupId}.PUT.md): deliveryBundleGroupId integer<int64>required (PUT /v1/product-delivery-info/bundle-groups/{deliveryBundleGroupId})
+- [물류사 연동 정보 조회](api/v1/logistics/logistics-companies.GET.md): 판매자 계정이 물류데이터플랫폼에서 연동 중인 물류사에 대해 물류사 ID, 물류사명을 조회합니다. (GET /v1/logistics/logistics-companies)
+- [반품 거부(철회)](api/v1/pay-order/seller/product-orders/{productOrderId}/claim/return/reject.POST.md): 1건의 상품 주문에 대한 반품 요청을 거부(철회)합니다. (POST /v1/pay-order/seller/product-orders/{productOrderId}/claim/return/reject)
+- [반품 보류 해제](api/v1/pay-order/seller/product-orders/{productOrderId}/claim/return/holdback/release.POST.md): 1건의 상품 주문에 대한 반품 보류를 해제합니다. (POST /v1/pay-order/seller/product-orders/{productOrderId}/claim/return/holdback/release)
+- [반품 보류](api/v1/pay-order/seller/product-orders/{productOrderId}/claim/return/holdback.POST.md): 1건의 상품 주문에 대한 반품을 보류합니다. (POST /v1/pay-order/seller/product-orders/{productOrderId}/claim/return/holdback)
+- [반품 승인](api/v1/pay-order/seller/product-orders/{productOrderId}/claim/return/approve.POST.md): 1건의 상품 주문에 대한 반품 요청을 승인합니다. (POST /v1/pay-order/seller/product-orders/{productOrderId}/claim/return/approve)
+- [반품 요청](api/v1/pay-order/seller/product-orders/{productOrderId}/claim/return/request.POST.md): 1건의 상품 주문에 대해 반품 요청합니다. (POST /v1/pay-order/seller/product-orders/{productOrderId}/claim/return/request)
+- [발송 지연 처리](api/v1/pay-order/seller/product-orders/{productOrderId}/delay.POST.md): 특정 상품 주문을 발송 지연 처리합니다. (POST /v1/pay-order/seller/product-orders/{productOrderId}/delay)
+- [발송 처리](api/v1/pay-order/seller/product-orders/dispatch.POST.md): 단수 또는 복수 개 상품 주문을 발송 처리합니다. 요청 가능한 상품 주문 번호는 최대 30개입니다. (POST /v1/pay-order/seller/product-orders/dispatch)
+- [발주 확인 처리](api/v1/pay-order/seller/product-orders/confirm.POST.md): 단수 또는 복수 개 상품 주문의 발주를 확인 처리합니다. 요청 가능한 상품 주문 번호는 최대 30개입니다. (POST /v1/pay-order/seller/product-orders/confirm)
+- [배송 통계 API](api/v1/bizdata-stats/channels/{channelNo}/sales/delivery/detail.GET.md): [브랜드스토어 전용] 배송 유형별 주문량과 배송 현황 데이터를 제공합니다. (GET /v1/bizdata-stats/channels/{channelNo}/sales/delivery/detail)
+- [배송 희망일 변경 처리](api/v1/pay-order/seller/product-orders/{productOrderId}/hope-delivery/change.POST.md): 배송 희망일 정보를 변경 처리합니다. (POST /v1/pay-order/seller/product-orders/{productOrderId}/hope-delivery/change)
+- [변경 상품 주문 내역 조회](api/v1/pay-order/seller/product-orders/last-changed-statuses.GET.md): 조회 요청 범위의 기준은 변경 일시(date-time)입니다. (GET /v1/pay-order/seller/product-orders/last-changed-statuses)
+- [브랜드 조회](api/v1/product-brands.GET.md): name stringrequired (GET /v1/product-brands)
+- [비즈월렛 결제 내역 조회](api/v1/commerce-solutions/transactions.GET.md): paymentConfirmStartDate string<date-time>required (GET /v1/commerce-solutions/transactions)
+- [사용 상태 조회](api/v1/commerce-solutions/subscriptions/{accountUid}.GET.md): accountUid stringrequired (GET /v1/commerce-solutions/subscriptions/{accountUid})
+- [사용 시작 거절](api/v1/commerce-solutions/subscriptions/{accountUid}/reject.PUT.md): 사용 시작 거절(개별 솔루션 사용에만 동작) (PUT /v1/commerce-solutions/subscriptions/{accountUid}/reject)
+- [사용 시작 승인](api/v1/commerce-solutions/subscriptions/approve.PUT.md): 사용 시작 승인(개별 솔루션 사용에만 동작) (PUT /v1/commerce-solutions/subscriptions/approve)
+- [사용 중지](api/v1/commerce-solutions/subscriptions/{accountUid}/unsubscription.PUT.md): 회차 중간에 회차 종료로 전환합니다. 유료 솔루션 사용자는 사용료가 환불되며, 환불 금액은 API에서 제공하는 일할 계산된 금액과 개발사에서 직접 입력한 금액 중 선택 가능합니다. (PUT /v1/commerce-solutions/subscriptions/{accountUid}/unsubscription)
+- [사용 해지 승인](api/v1/commerce-solutions/subscriptions/unsubscription/approve.PUT.md): 사용 해지 승인(개별 솔루션 사용에만 동작) (PUT /v1/commerce-solutions/subscriptions/unsubscription/approve)
+- [사용자 정의 채널 API](api/v1/bizdata-stats/channels/{channelNo}/marketing/custom/simple.GET.md): [브랜드스토어 전용] 조회 기간 내 사용자가 별도로 정의한 마케팅 채널별 유입 및 결제 성과를 간략하게 유입 수 기준 상위 10개 제공합니다. (GET /v1/bizdata-stats/channels/{channelNo}/marketing/custom/simple)
+- [사용자 정의 채널 상세 API](api/v1/bizdata-stats/channels/{channelNo}/marketing/custom/detail.GET.md): [브랜드스토어 전용] 조회 기간 내 사용자가 별도로 정의한 마케팅 채널별 유입 및 결제 성과를 유입 수 기준 상위 1000개 제공합니다. (GET /v1/bizdata-stats/channels/{channelNo}/marketing/custom/detail)
+- [사이즈 타입 조회](api/v1/product-sizes/{sizeTypeId}.GET.md): sizeTypeId integer<int64>required (GET /v1/product-sizes/{sizeTypeId})
+- [상품 목록 조회](api/v1/products/search.POST.md): searchKeywordType검색 키워드 타입 (string) (POST /v1/products/search)
+- [상품 문의 답변 등록/수정](api/v1/contents/qnas/{questionId}.PUT.md): 상품 문의의 답변을 등록하거나 수정할 수 있습니다. (PUT /v1/contents/qnas/{questionId})
+- [상품 문의 답변 템플릿 목록 조회](api/v1/contents/qnas/templates.GET.md): Schema (GET /v1/contents/qnas/templates)
+- [상품 문의 목록 조회](api/v1/contents/qnas.GET.md): page integer<int32> (GET /v1/contents/qnas)
+- [상품 벌크 업데이트](api/v1/products/origin-products/bulk-update.PUT.md): 상품의 특정 항목을 일괄 수정합니다. (PUT /v1/products/origin-products/bulk-update)
+- [상품 성과 API](api/v1/bizdata-stats/channels/{channelNo}/sales/product/detail.GET.md): [브랜드스토어 전용] 상품별 결제 데이터를 결제액 기준 상위 1000개 제공합니다. (GET /v1/bizdata-stats/channels/{channelNo}/sales/product/detail)
+- [상품 옵션 재고 변경](api/v1/products/origin-products/{originProductNo}/option-stock.PUT.md): 상품 옵션의 재고, 가격, 할인가를 변경합니다. (PUT /v1/products/origin-products/{originProductNo}/option-stock)
+- [상품 이미지 다건 등록](api/v1/product-images/upload.POST.md): POST multipart/form-data 방식으로 이미지 정보를 전송합니다. (POST /v1/product-images/upload)
+- [상품 주문 목록 조회](api/v1/pay-order/seller/orders/{orderId}/product-order-ids.GET.md): 주문에 대한 상품 주문 번호 목록을 조회합니다. (GET /v1/pay-order/seller/orders/{orderId}/product-order-ids)
+- [상품 주문 상세 내역 조회](api/v1/pay-order/seller/product-orders/query.POST.md): 상품 주문에 대한 상세 상품 주문 내역을 조회합니다. 요청 가능한 상품 주문 번호는 최대 300개입니다. (POST /v1/pay-order/seller/product-orders/query)
+- [상품/검색 채널 API](api/v1/bizdata-stats/channels/{channelNo}/sales/product-search/detail.GET.md): [브랜드스토어 전용] 검색 채널별 상품 결제 관련 데이터를 결제액 기준 상위 1000개 제공합니다. (GET /v1/bizdata-stats/channels/{channelNo}/sales/product-search/detail)
+- [상품/검색 채널 상품별 키워드 API](api/v1/bizdata-stats/channels/{channelNo}/sales/product-search/keyword-by-product.GET.md): [브랜드스토어 전용] 상품별로 판매에 영향을 주는 주요 키워드 데이터 최대 5개를 결제액 기준 상위 10개 상품에 대해 제공합니다. (GET /v1/bizdata-stats/channels/{channelNo}/sales/product-search/keyword-by-product)
+- [상품/마케팅 채널 API](api/v1/bizdata-stats/channels/{channelNo}/sales/product-marketing/detail.GET.md): [브랜드스토어 전용] 마케팅 채널별 상품 결제 데이터를 결제액 기준 상위 1000개 제공합니다. (GET /v1/bizdata-stats/channels/{channelNo}/sales/product-marketing/detail)
+- [상품/마케팅 채널 카테고리(소)별 API](api/v1/bizdata-stats/channels/{channelNo}/sales/product-marketing/category.GET.md): [브랜드스토어 전용] 카테고리(소)별로 최대 50개의 마케팅 채널별 결제 데이터를 결제액 기준 상위 15개 카테고리에 대해 제공합니다. (GET /v1/bizdata-stats/channels/{channelNo}/sales/product-marketing/category)
+- [상품별 API](api/v1/bizdata-stats/channels/{channelNo}/shopping/product/detail.GET.md): [브랜드스토어 전용] 조회 기간 내 상품별 고객의 주요 행동 데이터를 PV 기준 상위 20개 제공합니다. (GET /v1/bizdata-stats/channels/{channelNo}/shopping/product/detail)
+- [상품정보제공고시 상품군 단건 조회](api/v1/products-for-provided-notice/{productInfoProvidedNoticeType}.GET.md): 지정한 상품정보제공고시 상품군 유형의 정보를 조회합니다. (GET /v1/products-for-provided-notice/{productInfoProvidedNoticeType})
+- [상품정보제공고시 상품군 목록 조회](api/v1/products-for-provided-notice.GET.md): 카테고리 ID 입력 시 카테고리에서 추천하는 상품정보제공고시 상품군 목록을 조회합니다. 카테고리 ID 미입력 시 전체 상품군 목록을 조회합니다. 입력하는 카테고리 ID는 대카테고리 ID입니다. (GET /v1/products-for-provided-notice)
+- [수수료 상세 내역 조회](api/v1/pay-settle/settle/commission-details.GET.md): searchDate string<date> (GET /v1/pay-settle/settle/commission-details)
+- [수정 요청 상품 목록을 조회](api/v1/product-inspections/channel-products.GET.md): 상품 검수에서 수정 요청 상품으로 지정한 상품 목록을 조회합니다. (GET /v1/product-inspections/channel-products)
+- [수정 요청 상품에 대해 복원 요청](api/v1/product-inspections/channel-product/{channelProductNo}/restore.PUT.md): 수정 요청 상품에 대해 복원을 요청합니다. (PUT /v1/product-inspections/channel-product/{channelProductNo}/restore)
+- [시간대별 API](api/v1/bizdata-stats/channels/{channelNo}/marketing/hourly/simple.GET.md): [브랜드스토어 전용] 조회 기간 내 시간대별 유입 및 결제 성과를 제공합니다. (GET /v1/bizdata-stats/channels/{channelNo}/marketing/hourly/simple)
+- [시간대별 채널 API](api/v1/bizdata-stats/channels/{channelNo}/marketing/hourly/detail.GET.md): [브랜드스토어 전용] 조회 기간 내 시간대에 따른 마케팅 채널별 유입 및 결제 성과를 유입 수 기준 상위 100개 제공합니다. (GET /v1/bizdata-stats/channels/{channelNo}/marketing/hourly/detail)
+- [오늘 보고서 API](api/v1/bizdata-stats/channels/{channelNo}/realtime/daily.GET.md): [브랜드스토어 전용] 오늘 스토어의 거래 정보를 실시간으로 제공합니다(1시간 단위). (GET /v1/bizdata-stats/channels/{channelNo}/realtime/daily)
+- [오늘출발 설정 정보 조회](api/v1/seller/this-day-dispatch.GET.md): 오늘출발 설정 정보를 조회하는 API입니다. 조회 대상 판매자 번호에 대한 인증 토큰이 필요합니다. (GET /v1/seller/this-day-dispatch)
+- [오늘출발 정보 설정](api/v1/seller/this-day-dispatch.POST.md): 오늘출발 정보를 설정하는 API입니다. 당일 배송 설정, 휴무일을 설정할 수 있습니다. 설정 대상 판매자 번호에 대한 인증 토큰이 필요합니다. (POST /v1/seller/this-day-dispatch)
+- [외부 개발사 자체 결제 내역 전송](api/v1/commerce-solutions/external-transactions.POST.md): transactionType거래 타입 (string)required (POST /v1/commerce-solutions/external-transactions)
+- [원산지 코드 정보 다건 조회](api/v1/product-origin-areas/query.GET.md): 원산지 상세 지역명을 입력하거나 원산지 코드를 입력하여 검색할 수 있습니다. 원산지 코드를 입력한 경우 다른 검색 조건은 무시합니다. (GET /v1/product-origin-areas/query)
+- [원산지 코드 정보 전체 조회](api/v1/product-origin-areas.GET.md): 원산지 코드 전체를 조회합니다. (GET /v1/product-origin-areas)
+- [웹사이트 채널 API](api/v1/bizdata-stats/channels/{channelNo}/marketing/website/detail.GET.md): [브랜드스토어 전용] 조회 기간 내 웹사이트 채널을 통한 유입 및 결제 성과를 유입 수 기준 상위 1000개 제공합니다. (GET /v1/bizdata-stats/channels/{channelNo}/marketing/website/detail)
+- [웹사이트 채널 일별 API](api/v1/bizdata-stats/channels/{channelNo}/marketing/website/daily.GET.md): [브랜드스토어 전용] 웹사이트 채널을 통한 일별 유입 성과를 제공합니다. (GET /v1/bizdata-stats/channels/{channelNo}/marketing/website/daily)
+- [인증 토큰 발급 요청](api/v1/oauth2/token.POST.md): API 활용을 위한 인증 토큰을 발급/갱신 요청합니다. 동일 리소스(type과 account_id에 따라)에는 하나의 인증 토큰의 발급되며 인증 토큰의 유효 시간은 3시간(10,800초)입니다. 발급된 인증 토큰이 존재하는 경우 남은 유효 시간이 30분 이상이면 기존 인증 토큰이 반환되고 30분 미만이면 새로운 인증 토큰이 발급됩니다. (POST /v1/oauth2/token)
+- [일별 부가세 내역 조회](api/v1/pay-settle/vat/daily.GET.md): startDate string<date>required (GET /v1/pay-settle/vat/daily)
+- [일별 정산 내역 조회](api/v1/pay-settle/settle/daily.GET.md): startDate string<date>required (GET /v1/pay-settle/settle/daily)
+- [재구매 통계 API](api/v1/customer-data/repurchase/account/statistics.GET.md): [브랜드스토어 전용] 스토어의 주별 재구매 데이터를 제공합니다. 매주 월요일에 지난주 데이터가 생성됩니다. API 호출 시 반드시 월요일이 포함되어 있어야 데이터가 정상적으로 호출됩니다. (GET /v1/customer-data/repurchase/account/statistics)
+- [전체 사이즈 타입 조회](api/v1/product-sizes.GET.md): Schema (GET /v1/product-sizes)
+- [전체 속성값 단위 조회](api/v1/product-attributes/attribute-value-units.GET.md): Schema (GET /v1/product-attributes/attribute-value-units)
+- [전체 채널 API](api/v1/bizdata-stats/channels/{channelNo}/marketing/all/detail.GET.md): [브랜드스토어 전용] 조회 기간 내 유입이 발생한 마케팅 채널의 성과를 유입 수 기준 상위 1000개 제공합니다. (GET /v1/bizdata-stats/channels/{channelNo}/marketing/all/detail)
+- [전체 채널 일별 API](api/v1/bizdata-stats/channels/{channelNo}/marketing/all/daily.GET.md): [브랜드스토어 전용] 유입이 발생한 마케팅 채널의 일별 성과를 상위 10개 제공합니다. (GET /v1/bizdata-stats/channels/{channelNo}/marketing/all/daily)
+- [전체 카테고리 조회](api/v1/categories.GET.md): last boolean (GET /v1/categories)
+- [전체 패션모델 조회](api/v1/product-fashion-models.GET.md): Schema (GET /v1/product-fashion-models)
+- [제조사 조회](api/v1/product-manufacturers.GET.md): name stringrequired (GET /v1/product-manufacturers)
+- [조건형 상품 주문 상세 내역 조회](api/v1/pay-order/seller/product-orders.GET.md): 조건에 맞는 상품 주문에 대한 상세 내역을 조회합니다. (GET /v1/pay-order/seller/product-orders)
+- [주소록 단건 조회](api/v1/seller/addressbooks/{addressBookNo}.GET.md): 주소록 번호로 주소를 단건 조회하는 API입니다. 조회 대상 판매자 번호에 대한 인증 토큰이 필요합니다. (GET /v1/seller/addressbooks/{addressBookNo})
+- [주소록 목록 조회](api/v1/seller/addressbooks-for-page.GET.md): 주소록을 페이징 형식의 목록으로 조회하는 API입니다. 조회 대상 판매자 번호에 대한 인증 토큰이 필요합니다. (GET /v1/seller/addressbooks-for-page)
+- [채널 상품 공지사항 적용](api/v1/products/channel-products/notice/apply.PUT.md): sellerNoticeId판매자 공지사항 번호 (integer<int64>) (PUT /v1/products/channel-products/notice/apply)
+- [취소 요청 승인](api/v1/pay-order/seller/product-orders/{productOrderId}/claim/cancel/approve.POST.md): 1건의 상품 주문에 대한 취소 요청을 승인합니다. (POST /v1/pay-order/seller/product-orders/{productOrderId}/claim/cancel/approve)
+- [취소 요청](api/v1/pay-order/seller/product-orders/{productOrderId}/claim/cancel/request.POST.md): 1건의 상품 주문을 취소 요청합니다. (POST /v1/pay-order/seller/product-orders/{productOrderId}/claim/cancel/request)
+- [카탈로그 단건 조회](api/v1/product-models/{id}.GET.md): id integer<int64>required (GET /v1/product-models/{id})
+- [카탈로그 조회](api/v1/product-models.GET.md): name stringrequired (GET /v1/product-models)
+- [카테고리 조회](api/v1/categories/{categoryId}.GET.md): categoryId stringrequired (GET /v1/categories/{categoryId})
+- [카테고리별 속성 조회](api/v1/product-attributes/attributes.GET.md): categoryId stringrequired (GET /v1/product-attributes/attributes)
+- [카테고리별 속성값 조회](api/v1/product-attributes/attribute-values.GET.md): categoryId stringrequired (GET /v1/product-attributes/attribute-values)
+- [카테고리별 표준형 옵션 조회](api/v1/options/standard-options.GET.md): categoryId stringrequired (GET /v1/options/standard-options)
+- [판매 상태 변경](api/v1/products/origin-products/{originProductNo}/change-status.PUT.md): 원상품의 판매 상태를 변경합니다. (PUT /v1/products/origin-products/{originProductNo}/change-status)
+- [판매 성과 API](api/v1/bizdata-stats/channels/{channelNo}/sales/hourly/detail.GET.md): [브랜드스토어 전용] 시간대별 스토어의 주요 거래 데이터를 제공합니다. (GET /v1/bizdata-stats/channels/{channelNo}/sales/hourly/detail)
+- [판매자 인증 JWE 해석 API](api/v1/commerce-solutions/seller-info-by-token.GET.md): token stringrequired (GET /v1/commerce-solutions/seller-info-by-token)
+- [판매자 창고 정보 조회](api/v1/logistics/outbound-locations.GET.md): 판매자 계정이 운영 중인 창고에 대한 창고 ID, 창고명, 택배사, 배송 속성을 조회합니다. (GET /v1/logistics/outbound-locations)
+- [패션모델 삭제](api/v1/product-fashion-models/{fashionModelId}.DELETE.md): fashionModelId integer<int64>required (DELETE /v1/product-fashion-models/{fashionModelId})
+- [패션모델 수정](api/v1/product-fashion-models/{fashionModelId}.PUT.md): fashionModelId integer<int64>required (PUT /v1/product-fashion-models/{fashionModelId})
+- [패션모델 저장](api/v1/product-fashion-models.POST.md): id패션모델 번호 (integer<int64>) (POST /v1/product-fashion-models)
+- [페이지별 API](api/v1/bizdata-stats/channels/{channelNo}/shopping/page/detail.GET.md): [브랜드스토어 전용] 조회 기간 내 페이지별 고객의 주요 행동 데이터를 PV 기준 상위 1000개 제공합니다. (GET /v1/bizdata-stats/channels/{channelNo}/shopping/page/detail)
+- [하위 원산지 코드 정보 다건 조회](api/v1/product-origin-areas/sub-origin-areas.GET.md): 하위 원산지 코드 정보를 조회합니다. 원산지 코드를 입력하지 않으면 최상위 코드 정보를 조회합니다. (GET /v1/product-origin-areas/sub-origin-areas)
+- [하위 카테고리 조회](api/v1/categories/{categoryId}/sub-categories.GET.md): categoryId stringrequired (GET /v1/categories/{categoryId}/sub-categories)
+- [희망일배송 그룹 다건 조회](api/v1/product-delivery-info/hope-delivery-groups.GET.md): 희망일배송 그룹 목록을 조회합니다. (GET /v1/product-delivery-info/hope-delivery-groups)
+- [희망일배송 그룹 단건 조회](api/v1/product-delivery-info/hope-delivery-groups/{hopeDeliveryGroupId}.GET.md): 희망일배송 그룹 정보를 조회합니다. (GET /v1/product-delivery-info/hope-delivery-groups/{hopeDeliveryGroupId})
+- [희망일배송 그룹 등록](api/v1/product-delivery-info/hope-delivery-groups.POST.md): hopeDeliveryGroup 희망일배송 그룹 정보 구조체 (object)required (POST /v1/product-delivery-info/hope-delivery-groups)
+- [희망일배송 그룹 수정](api/v1/product-delivery-info/hope-delivery-groups/{hopeDeliveryGroupId}.PUT.md): hopeDeliveryGroupId integer<int64>required (PUT /v1/product-delivery-info/hope-delivery-groups/{hopeDeliveryGroupId})
+
+## 스키마
+
+- [고객 문의 내용 구조체](schema/고객-문의-내용-구조체.md): 이 구조체는 구매자가 남긴 고객 문의 내용 데이터를 표현하는 구조체입니다.
+- [공지사항 내용 구조체](schema/공지사항-내용-구조체.md): 이 구조체는 상품 공지사항 내용 데이터를 표현하는 구조체입니다.
+- [묶음배송 그룹 정보 구조체](schema/묶음배송-그룹-정보-구조체.md): 묶음배송 그룹 정보 이 구조체는 상품의 배송 정보 중 묶음배송 그룹 정보 데이터를 표현하는 구조체입니다.
+- [반품 택배사 정보 구조체](schema/반품-택배사-정보-구조체.md): 이 구조체는 상품의 배송 정보 중 반품 택배사 정보 데이터를 표현하는 구조체입니다. 사전에 스마트스토어센터로 등록한 반품 택배사 계약 정보에 따라 선택 가능한 반품 택배사 목록을 표현합니다.
+- [변경 상품 주문 정보 구조체](schema/변경-상품-주문-정보-구조체.md): 이 구조체는 주문건의 변경 상품 주문 정보를 표현하는 구조체입니다. 전체 주문건에서 지정된 조회 조건에 해당하는 주문건을 식별할 수 있는 일부 정보를 표현합니다.
+- [사용 상태 정보 구조체](schema/사용-상태-정보-구조체.md): 사용 현황 응답 데이터 이 구조체는 대상 사용자의 솔루션 사용 상태 정보를 표현하는 구조체입니다.
+- [상품 문의 내용 구조체](schema/상품-문의-내용-구조체.md): 상품 문의 목록 응답 이 구조체는 대상 상품의 상세 페이지에서 상품Q&A로 남겨진 상품 문의 내용 데이터를 표현하는 구조체입니다.
+- [상품 주문 정보 구조체](schema/상품-주문-정보-구조체.md): 이 구조체는 주문건의 상세 정보를 표현하는 구조체입니다.
+- [쇼핑윈도 채널상품 정보 구조체](schema/쇼핑윈도-채널상품-정보-구조체.md): 이 구조체는 상품 정보 중 쇼핑윈도 채널상품 속성에 해당하는 상품 데이터를 표현하는 구조체입니다.
+- [스마트스토어 채널상품 정보 구조체](schema/스마트스토어-채널상품-정보-구조체.md): 이 구조체는 상품 정보 중 스마트스토어 채널상품 속성에 해당하는 상품 데이터를 표현하는 구조체입니다.
+- [원상품 정보 구조체](schema/원상품-정보-구조체.md): 응답용 상품 속성. 원상품에 속한 채널 상품은 모두 상품 공통 속성을 참고합니다. 이 구조체는 상품 정보 중 원상품 속성에 해당하는 상품 데이터를 표현하는 구조체입니다.
+- [주문-클레임 처리 반환 구조체](schema/주문-클레임-처리-반환-구조체.md): 이 구조체는 주문-클레임 처리 관련 다수 API에서 공통으로 사용하는 반환 메시지 형식을 표현하는 구조체입니다. 다양한 주문-클레임 처리 관련 API 호출의 응답 결과를 이 구조체를 활용하여 처리할 수 있습니다.
+- [희망일배송 그룹 정보 구조체](schema/희망일배송-그룹-정보-구조체.md): 이 구조체는 상품의 배송 정보 중 희망일배송 그룹 정보 데이터를 표현하는 구조체입니다. 희망일배송 그룹 정보는 희망일배송 설정 상품에만 적용 가능하며 희망일배송 설정은 일부 판매자에 한하여 지정 조건에서만 설정이 가능합니다.
+
+## Optional
+
+- [커머스API](category/index.md): 커머스API 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 인증, API데이터솔루션(통계) 외 7건.
+- [OAuth 2.0](category/o-auth-2-0.md): OAuth 2.0 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 인증 토큰 발급 요청.
+- [SKU](category/sku.md): SKU 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: SKU 목록 조회 API, SKU 조회 API 외 1건.
+- [고객 데이터](category/고객-데이터.md): 고객 데이터 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 고객 현황(계정) API, 고객 현황(채널) API 외 1건.
+- [고객 문의 답변 등록/수정](category/고객-문의-답변-등록-수정.md): 고객 문의 답변 등록/수정 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 고객 문의 답변 등록, 고객 문의 답변 수정.
+- [고객 문의 조회](category/고객-문의-조회.md): 고객 문의 조회 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 고객 문의 내용 구조체, 고객 문의 조회.
+- [교환](category/교환.md): 교환 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 주문-클레임 처리 반환 구조체, 교환 수거 완료 외 4건.
+- [그룹상품](category/그룹상품.md): 그룹상품 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: (v2) 그룹상품 등록, (v2) 그룹상품 요청 결과 조회 외 4건.
+- [마케팅 분석](category/마케팅-분석.md): 마케팅 분석 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 전체 채널 일별 API, 전체 채널 API 외 8건.
+- [반품](category/반품.md): 반품 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 주문-클레임 처리 반환 구조체, 반품 승인 외 4건.
+- [발주/발송 처리](category/발주-발송-처리.md): 발주/발송 처리 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 주문-클레임 처리 반환 구조체, 발주 확인 처리 외 3건.
+- [부가세 내역](category/부가세-내역.md): 부가세 내역 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 건별 부가세 내역 조회, 일별 부가세 내역 조회.
+- [브랜드](category/브랜드.md): 브랜드 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 브랜드 조회.
+- [비즈월렛 결제 내역 조회](category/비즈월렛-결제-내역-조회.md): 비즈월렛 결제 내역 조회 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 비즈월렛 결제 내역 조회.
+- [사이즈](category/사이즈.md): 사이즈 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 전체 사이즈 타입 조회, 사이즈 타입 조회.
+- [상품 검수](category/상품-검수.md): 상품 검수 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 수정 요청 상품에 대해 복원 요청, 수정 요청 상품 목록을 조회.
+- [상품 공지사항 적용](category/상품-공지사항-적용.md): 상품 공지사항 적용 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 채널 상품 공지사항 적용.
+- [상품 공지사항](category/상품-공지사항.md): 상품 공지사항 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 공지사항 내용 구조체, 공지사항 목록 조회 외 4건.
+- [상품 목록](category/상품-목록.md): 상품 목록 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 상품 목록 조회.
+- [상품 문의](category/상품-문의.md): 상품 문의 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 상품 문의 내용 구조체, 상품 문의 목록 조회 외 2건.
+- [상품 배송 정보](category/상품-배송-정보.md): 상품 배송 정보 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 묶음배송 그룹 정보 구조체, 희망일배송 그룹 정보 구조체 외 10건.
+- [상품 속성](category/상품-속성.md): 상품 속성 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 전체 속성값 단위 조회, 카테고리별 속성값 조회 외 1건.
+- [상품 원산지 정보](category/상품-원산지-정보.md): 상품 원산지 정보 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 원산지 코드 정보 전체 조회, 원산지 코드 정보 다건 조회 외 1건.
+- [상품 이미지](category/상품-이미지.md): 상품 이미지 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 상품 이미지 다건 등록.
+- [상품 일괄 수정](category/상품-일괄-수정.md): 상품 일괄 수정 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 상품 벌크 업데이트.
+- [상품](category/상품.md): 상품 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 원상품 정보 구조체, 스마트스토어 채널상품 정보 구조체 외 11건.
+- [상품정보제공고시](category/상품정보제공고시.md): 상품정보제공고시 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 상품정보제공고시 상품군 목록 조회, 상품정보제공고시 상품군 단건 조회.
+- [솔루션 사용 API](category/솔루션-사용-api.md): 솔루션 사용 API 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 사용 상태 정보 구조체, 사용 시작 승인 외 4건.
+- [쇼핑행동 분석](category/쇼핑행동-분석.md): 쇼핑행동 분석 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 페이지별 API, 상품별 API.
+- [실시간 분석](category/실시간-분석.md): 실시간 분석 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 오늘 보고서 API.
+- [옵션](category/옵션.md): 옵션 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 카테고리별 표준형 옵션 조회.
+- [외부 개발사 자체 결제](category/외부-개발사-자체-결제.md): 외부 개발사 자체 결제 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 외부 개발사 자체 결제 내역 전송.
+- [정산 내역](category/정산-내역.md): 정산 내역 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 건별 정산 내역 조회, 수수료 상세 내역 조회 외 1건.
+- [제조사](category/제조사.md): 제조사 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 제조사 조회.
+- [주문 조회](category/주문-조회.md): 주문 조회 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 변경 상품 주문 정보 구조체, 상품 주문 정보 구조체 외 4건.
+- [취소](category/취소.md): 취소 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 주문-클레임 처리 반환 구조체, 취소 요청 승인 외 1건.
+- [카탈로그](category/카탈로그.md): 카탈로그 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 카탈로그 조회, 카탈로그 단건 조회.
+- [카테고리](category/카테고리.md): 카테고리 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 전체 카테고리 조회, 카테고리 조회 외 1건.
+- [태그](category/태그.md): 태그 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: (v2) 추천 태그 검색 목록 조회, (v2) 제한 태그 여부 조회.
+- [판매 분석](category/판매-분석.md): 판매 분석 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 배송 통계 API, 판매 성과 API 외 5건.
+- [판매 옵션](category/판매-옵션.md): 판매 옵션 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: (v2) 판매 옵션 정보 조회.
+- [판매자 물류](category/판매자-물류.md): 판매자 물류 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 물류사 연동 정보 조회, 판매자 창고 정보 조회.
+- [판매자 오늘출발 설정](category/판매자-오늘출발-설정.md): 판매자 오늘출발 설정 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 오늘출발 설정 정보 조회, 오늘출발 정보 설정.
+- [판매자 인증 JWE 해석](category/판매자-인증-jwe-해석.md): 판매자 인증 JWE 해석 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 판매자 인증 JWE 해석 API.
+- [판매자 주소록](category/판매자-주소록.md): 판매자 주소록 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 주소록 목록 조회, 주소록 단건 조회.
+- [판매자](category/판매자.md): 판매자 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 계정 정보 조회, 계정으로 채널 정보 조회.
+- [패션모델](category/패션모델.md): 패션모델 관련 API 문서를 모아둔 카테고리 인덱스입니다. 주요 문서: 전체 패션모델 조회, 패션모델 저장 외 2건.

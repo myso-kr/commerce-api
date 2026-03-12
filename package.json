@@ -1,0 +1,72 @@
+{
+  "name": "naver-commerce-api-docs-cli",
+  "version": "1.0.0",
+  "description": "LLM-agent-friendly Naver Commerce API docs CLI with bundled normalized docs and JSONL output.",
+  "type": "module",
+  "main": "./dist/cli.js",
+  "bin": {
+    "naver-commerce-api-docs-cli": "./dist/cli.js",
+    "ncad": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "docs",
+    "SKILLS.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "naver",
+    "commerce",
+    "api",
+    "apicenter",
+    "docs",
+    "cli",
+    "llm",
+    "agent",
+    "rag",
+    "scraper",
+    "markdown"
+  ],
+  "author": "Choi Won <help@myso.kr> (https://myso.kr)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/myso-kr/commerce-api.git"
+  },
+  "homepage": "https://github.com/myso-kr/commerce-api#readme",
+  "bugs": {
+    "url": "https://github.com/myso-kr/commerce-api/issues"
+  },
+  "packageManager": "npm@11.7.0",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "check": "tsc -p tsconfig.json",
+    "start": "node ./dist/cli.js",
+    "test:cli": "npm run build && vitest run",
+    "prepublishOnly": "npm run check && npm run test:cli && npm run build"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "commander": "^12.1.0",
+    "js-yaml": "^4.1.0",
+    "turndown": "^7.2.0"
+  },
+  "optionalDependencies": {
+    "playwright": "^1.51.0"
+  },
+  "devDependencies": {
+    "@types/cheerio": "^0.22.35",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.0.0",
+    "@types/turndown": "^5.0.5",
+    "typescript": "^5.7.0",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
