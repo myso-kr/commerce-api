@@ -17,6 +17,26 @@ export interface ScrapeApiOpts {
   dst?: string;
   normalize?: boolean;
   guide?: boolean;
+  maintainer?: boolean;
+}
+
+function rejectWithoutMaintainerFlag(): number {
+  error("maintainer_only", {
+    ok: false,
+    msg: "scrape-api는 maintainer 전용 raw 수집 명령입니다. 일반적인 질의/구현 workflow에서는 사용할 수 없습니다.",
+    required_flag: "--maintainer",
+  });
+  emitGuide({
+    use_for: "Do not start with scrape-api for ordinary npx retrieval. Use the normalized docs that are already bundled or cached.",
+    next_steps: [
+      'Run `ask "<question>"` first to retrieve likely guide/api documents.',
+      "Run `api --path <path> --method <METHOD> --body` or `api --doc-id <id>` for exact grounding.",
+      "Run `sync` only when you explicitly need the latest upstream docs in managed cache.",
+      "Use `scrape-api --maintainer ...` only for maintainer raw crawl refreshes and crawler debugging.",
+    ],
+    caution: "scrape-api performs a deep raw crawl and requires Playwright/browser setup. It should not be the first choice for LLM agents.",
+  });
+  return 1;
 }
 
 async function main(
@@ -82,6 +102,7 @@ async function main(
 
 export async function run(opts: ScrapeApiOpts): Promise<number> {
   setCmd("scrape-api");
+  if (!opts.maintainer) return rejectWithoutMaintainerFlag();
   const out = resolveWritableRawsRoot(opts.out);
   const dst = resolveWritableDocsRoot(opts.dst);
   const normalize = opts.normalize ?? true;

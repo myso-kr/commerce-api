@@ -37,6 +37,25 @@ function isDirectory(targetPath: string): boolean {
   }
 }
 
+function hasDocsCorpusSignature(docsRoot: string): boolean {
+  if (!isDirectory(docsRoot)) return false;
+  if (OUTPUT_DIR_NAMES.some((name) => isDirectory(path.join(docsRoot, name)))) return true;
+  if (fs.existsSync(path.join(docsRoot, "llms.txt"))) return true;
+  if (fs.existsSync(path.join(docsRoot, "llms-full.txt"))) return true;
+  return false;
+}
+
+function findNearestAncestorDir(startDir: string, childName: string): string | null {
+  let current = path.resolve(startDir);
+  while (true) {
+    const candidate = path.join(current, childName);
+    if (hasDocsCorpusSignature(candidate)) return candidate;
+    const parent = path.dirname(current);
+    if (parent === current) return null;
+    current = parent;
+  }
+}
+
 export function resolveCwdDocsRoot(): string {
   return path.resolve(process.cwd(), "docs");
 }
@@ -123,15 +142,15 @@ export function resolveManagedRawsRoot(): string {
 
 export function resolveReadableDocsRoot(targetPath?: string): string {
   if (targetPath) return path.resolve(targetPath);
-  const cwdDocs = resolveCwdDocsRoot();
-  if (isDirectory(cwdDocs)) return cwdDocs;
+  const nearestProjectDocs = findNearestAncestorDir(process.cwd(), "docs");
+  if (nearestProjectDocs) return nearestProjectDocs;
 
   const managedDocs = resolveManagedDocsRoot();
-  if (isDirectory(managedDocs)) return managedDocs;
+  if (hasDocsCorpusSignature(managedDocs)) return managedDocs;
 
   for (const legacyRoot of resolveLegacyManagedStateRootsFor()) {
     const legacyManagedDocs = path.join(legacyRoot, "docs");
-    if (isDirectory(legacyManagedDocs)) return legacyManagedDocs;
+    if (hasDocsCorpusSignature(legacyManagedDocs)) return legacyManagedDocs;
   }
 
   return BUNDLED_DOCS_ROOT;

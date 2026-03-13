@@ -20,6 +20,26 @@ export interface ScrapeOpts {
   out?: string;
   dst?: string;
   normalize?: boolean;
+  maintainer?: boolean;
+}
+
+function rejectWithoutMaintainerFlag(): number {
+  error("maintainer_only", {
+    ok: false,
+    msg: "scrape는 maintainer 전용 raw 수집 명령입니다. 일반적인 질의/구현 workflow에서는 사용할 수 없습니다.",
+    required_flag: "--maintainer",
+  });
+  emitGuide({
+    use_for: "Do not use scrape for ordinary LLM retrieval. Use the bundled or cached normalized docs first.",
+    next_steps: [
+      'Run `ask "<question>"` to retrieve candidate docs from the bundled or cached corpus.',
+      "Run `api --path <path> --method <METHOD> --body` for exact endpoint grounding after ask.",
+      "Run `sync` only if the upstream docs changed and you explicitly need a refreshed managed cache.",
+      "Use `scrape --maintainer ...` only for maintainer raw collection and crawler debugging.",
+    ],
+    caution: "scrape performs raw site crawling and requires Playwright/browser setup. It is not the default path for npx users.",
+  });
+  return 1;
 }
 
 async function main(outputDir: string, docsDir: string, normalize: boolean): Promise<number> {
@@ -140,6 +160,7 @@ async function main(outputDir: string, docsDir: string, normalize: boolean): Pro
 
 export async function run(opts: ScrapeOpts): Promise<number> {
   setCmd("scrape");
+  if (!opts.maintainer) return rejectWithoutMaintainerFlag();
   const out = resolveWritableRawsBaseDir(opts.out);
   const dst = resolveWritableDocsRoot(opts.dst);
   const normalize = opts.normalize ?? true;

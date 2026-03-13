@@ -8,10 +8,31 @@ export interface SyncOpts {
   out?: string;
   dst?: string;
   summary?: boolean;
+  latest?: boolean;
+}
+
+function rejectWithoutLatestFlag(): number {
+  info("blocked", {
+    ok: false,
+    reason: "explicit_latest_confirmation_required",
+    required_flag: "--latest",
+    msg: "sync는 최신 upstream 문서로 managed cache를 갱신하는 명령입니다. 일반 조회에는 필요하지 않습니다.",
+  });
+  emitGuide({
+    use_for: "Prefer existing normalized docs before refreshing from upstream.",
+    next_steps: [
+      'If the project already has docs/, run `ask "<question>"` or `api --path <path> --method <METHOD>` and let the CLI use that project corpus first.',
+      "If project-local docs/ is missing, the CLI will automatically fall back to managed cache and then bundled docs.",
+      "Run `sync --latest` only when upstream docs changed and you explicitly need a managed-cache refresh.",
+    ],
+    caution: "sync performs upstream crawl + normalization + validation. It is intentionally gated to reduce unnecessary network refreshes.",
+  });
+  return 1;
 }
 
 export async function run(opts: SyncOpts): Promise<number> {
   setCmd("sync");
+  if (!opts.latest) return rejectWithoutLatestFlag();
   const summary = opts.summary ?? true;
   const out = opts.out ?? resolveManagedRawsRoot();
   const dst = opts.dst ?? resolveManagedDocsRoot();
@@ -27,6 +48,7 @@ export async function run(opts: SyncOpts): Promise<number> {
     dst,
     normalize: true,
     guide: false,
+    maintainer: true,
   });
 
   let validateCode = 1;

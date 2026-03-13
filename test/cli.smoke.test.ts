@@ -112,6 +112,66 @@ describe("CLI smoke", () => {
     expect(result.stdout).toMatch(/source/);
     expect(result.stdout).toMatch(/check/);
     expect(result.stdout).toMatch(/agent/);
+    expect(result.stdout).toContain("먼저 `ask \"질문\"`으로 후보 문서를 찾습니다.");
+    expect(result.stdout).toContain("일반적인 `npx` 사용에서는 번들 docs와 managed cache를 자동 사용하므로 `sync`, `scrape`, `scrape-api`로 시작하지 마십시오.");
+  });
+
+  it("shows ask-first guidance in ask help", async () => {
+    const result = await runCli(["ask", "--help"]);
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("첫 호출로 권장됩니다.");
+    expect(result.stdout).toContain("`api --path ... --method ...` 또는 `api --doc-id ...`로 exact lookup을 추가하십시오.");
+  });
+
+  it("marks scrape-api as maintainer-only in help", async () => {
+    const result = await runCli(["scrape-api", "--help"]);
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("maintainer 전용 raw 수집/debug 명령입니다.");
+    expect(result.stdout).toContain("실행하려면 `--maintainer` 플래그가 필요합니다.");
+    expect(result.stdout).toContain("ordinary query, 코드 생성, 문서 질의의 첫 단계로 사용하지 마십시오.");
+  });
+
+  it("marks source group as maintenance-oriented in help", async () => {
+    const result = await runCli(["source", "--help"]);
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("source 그룹은 corpus 유지보수용입니다.");
+    expect(result.stdout).toContain("일반적인 문서 질의, 코드 생성, SDK 구현에서는 먼저 `ask`와 `api`를 사용하십시오.");
+  });
+
+  it("marks sync as opt-in latest refresh in help", async () => {
+    const result = await runCli(["sync", "--help"]);
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("실행하려면 `--latest` 플래그가 필요합니다.");
+    expect(result.stdout).toContain("managed cache");
+  });
+
+  it("rejects scrape-api without an explicit maintainer flag", async () => {
+    const result = await runCli(["scrape-api"]);
+    expect(result.status).toBe(1);
+
+    const events = parseJsonLines(result.stdout);
+    const errorEvent = events.find((event) => event.event === "maintainer_only");
+    const guide = events.find((event) => event.event === "guide");
+
+    expect(errorEvent?.cmd).toBe("scrape-api");
+    expect(errorEvent?.required_flag).toBe("--maintainer");
+    expect(String(errorEvent?.msg ?? "")).toContain("maintainer 전용 raw 수집");
+    expect(guide?.audience).toBe("agent");
+    expect(String(guide?.use_for ?? "")).toContain("Do not start with scrape-api");
+  });
+
+  it("rejects sync without an explicit latest flag", async () => {
+    const result = await runCli(["sync"]);
+    expect(result.status).toBe(1);
+
+    const events = parseJsonLines(result.stdout);
+    const blocked = events.find((event) => event.event === "blocked");
+    const guide = events.find((event) => event.event === "guide");
+
+    expect(blocked?.cmd).toBe("sync");
+    expect(blocked?.required_flag).toBe("--latest");
+    expect(String(blocked?.reason ?? "")).toBe("explicit_latest_confirmation_required");
+    expect(String(guide?.use_for ?? "")).toContain("Prefer existing normalized docs");
   });
 
   it("returns ranked evidence for a natural-language auth question", async () => {
@@ -666,6 +726,31 @@ describe("CLI smoke", () => {
       const match = events.find((event) => event.event === "match");
       expect(String(match?.body ?? "")).toContain("[managed-cache]");
     });
+  });
+
+  it("prefers nearest ancestor project docs over managed cache and bundled docs", async () => {
+    const tmpRoot = makeTempDir("naver-commerce-api-docs-ancestor-read-");
+    const projectRoot = path.join(tmpRoot, "workspace");
+    const nestedRoot = path.join(projectRoot, "packages", "demo");
+    const docsFile = path.join(projectRoot, "docs", "api", "v2", "products.POST.md");
+    fs.mkdirSync(path.dirname(docsFile), { recursive: true });
+
+    const bundledFile = path.join(ROOT, "docs", "api", "v2", "products.POST.md");
+    const projectContent = fs
+      .readFileSync(bundledFile, "utf-8")
+      .replace("# (v2) 상품 등록", "# (v2) 상품 등록 [project-ancestor]");
+    fs.writeFileSync(docsFile, projectContent, "utf-8");
+    fs.mkdirSync(nestedRoot, { recursive: true });
+
+    const result = await runCli(
+      ["api", "--path", "/v2/products", "--method", "POST"],
+      { cwd: nestedRoot },
+    );
+
+    expect(result.status).toBe(0);
+    const events = parseJsonLines(result.stdout);
+    const match = events.find((event) => event.event === "match");
+    expect(String(match?.body ?? "")).toContain("[project-ancestor]");
   });
 
   it("ships bundled docs in the published package contract", () => {

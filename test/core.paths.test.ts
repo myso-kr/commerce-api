@@ -1,5 +1,8 @@
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { resolveManagedStateRootFor } from "../src/core/paths.js";
+import { resolveManagedStateRootFor, resolveReadableDocsRoot } from "../src/core/paths.js";
 
 describe("core paths", () => {
   it("uses LOCALAPPDATA on Windows", () => {
@@ -69,5 +72,40 @@ describe("core paths", () => {
     });
 
     expect(root).toBe("/home/alice/.cache/naver-commerce-api-docs-cli");
+  });
+
+  it("prefers nearest ancestor docs over managed or bundled docs", () => {
+    const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), "naver-commerce-api-docs-paths-"));
+    const projectRoot = path.join(tmpRoot, "project");
+    const nestedRoot = path.join(projectRoot, "packages", "demo", "src");
+    const docsRoot = path.join(projectRoot, "docs");
+    fs.mkdirSync(path.join(docsRoot, "api"), { recursive: true });
+    fs.mkdirSync(nestedRoot, { recursive: true });
+
+    const originalCwd = process.cwd();
+    try {
+      process.chdir(nestedRoot);
+      expect(resolveReadableDocsRoot()).toBe(docsRoot);
+    } finally {
+      process.chdir(originalCwd);
+    }
+  });
+
+  it("ignores ancestor docs directories without a normalized corpus signature", () => {
+    const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), "naver-commerce-api-docs-paths-"));
+    const projectRoot = path.join(tmpRoot, "project");
+    const nestedRoot = path.join(projectRoot, "packages", "demo", "src");
+    const docsRoot = path.join(projectRoot, "docs");
+    fs.mkdirSync(docsRoot, { recursive: true });
+    fs.mkdirSync(nestedRoot, { recursive: true });
+    fs.writeFileSync(path.join(docsRoot, "README.md"), "# unrelated docs\n", "utf-8");
+
+    const originalCwd = process.cwd();
+    try {
+      process.chdir(nestedRoot);
+      expect(resolveReadableDocsRoot()).not.toBe(docsRoot);
+    } finally {
+      process.chdir(originalCwd);
+    }
   });
 });
